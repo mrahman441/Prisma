@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+  age   Int?
+  posts Post[] // relation to Post
+}
+
+model Post {
+  id      String  @id @default(uuid())
+  title   String
+  content String?
+
+  authorId String // foreign key to User
+  author   User   @relation(fields: [authorId], references: [id]) // relation to User
+
+  tags Tag[] // many-to-many relation 
+}
+
+model Tag {
+  id   String @id @default(uuid())
+  name String @unique
+
+  posts Post[] // many-to-many relation
+}
